@@ -11,8 +11,8 @@ const authController = {
     //---------------- LOGIN ----------------
     login: async (req, res) => {
         try {
-            const errors = validationResult(request);
-            if (!errors.isEmpty()) {
+            const errors=validationResult(request);
+            if(!errors.isEmpty()){
                 return response.status(401).json({ errors: errors.array() });
             }
             const { username, password } = req.body;
