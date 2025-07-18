@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const Users = require('../model/Users');
 const { OAuth2Client } = require('google-auth-library');
 const { validationResult } = require('express-validator');
-const { attemptToRefreshToken}=require('../util/authUtil');
+const { attemptToRefreshToken } = require('../util/authUtil');
 const sendMail = require('../service/emailService');
 
 // https://www.uuidgenerator.net/
@@ -46,19 +46,19 @@ const authController = {
             const token = jwt.sign(user, secret, { expiresIn: '1h' });
             response.cookie('jwtToken', token, {
                 httpOnly: true,
-                secure: true,
-                domain: 'localhost',
-                path: '/'
+                secure: process.env.NODE_ENV === 'production',
+                path: '/',
+                sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
             });
 
             const refreshToken = jwt.sign(user, refreshSecret, { expiresIn: '7d' });
             // store it in database if you want! Stroing in DB will
             // make refresh tokens more secure
-            response.cookie('refreshToken', refreshToken, {
+            response.cookie('jwtToken', token, {
                 httpOnly: true,
-                secure: true,
-                domain: 'localhost',
-                path: '/'
+                secure: process.env.NODE_ENV === 'production',
+                path: '/',
+                sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
             });
             response.json({ user: user, message: 'User authenticated' });
         } catch (error) {
@@ -85,11 +85,11 @@ const authController = {
                 if (refreshToken) {
                     const { newAccessToken, user } =
                         await attemptToRefreshToken(refreshToken);
-                    response.cookie('jwtToken', newAccessToken, {
+                    response.cookie('jwtToken', token, {
                         httpOnly: true,
-                        secure: true,
-                        domain: 'localhost',
-                        path: '/'
+                        secure: process.env.NODE_ENV === 'production',
+                        path: '/',
+                        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
                     });
                     console.log('Refresh token renewed the access token')
                     return response.json({ message: 'User is logged in', user: user });
@@ -136,9 +136,9 @@ const authController = {
 
             response.cookie('jwtToken', token, {
                 httpOnly: true,
-                secure: true,
-                domain: 'localhost',
-                path: '/'
+                secure: process.env.NODE_ENV === 'production',
+                path: '/',
+                sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
             });
             response.json({ message: 'User registered', user: userDetails });
         } catch (error) {
@@ -187,19 +187,19 @@ const authController = {
             const token = jwt.sign(user, secret, { expiresIn: '1h' });
             response.cookie('jwtToken', token, {
                 httpOnly: true,
-                secure: true,
-                domain: 'localhost',
-                path: '/'
+                secure: process.env.NODE_ENV === 'production',
+                path: '/',
+                sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
             });
 
             const refreshToken = jwt.sign(user, refreshSecret, { expiresIn: '7d' });
             // store it in database if you want! Stroing in DB will
             // make refresh tokens more secure
-            response.cookie('refreshToken', refreshToken, {
+            response.cookie('jwtToken', token, {
                 httpOnly: true,
-                secure: true,
-                domain: 'localhost',
-                path: '/'
+                secure: process.env.NODE_ENV === 'production',
+                path: '/',
+                sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
             });
             response.json({ user: user, message: 'User authenticated' });
         } catch (error) {
