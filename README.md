@@ -25,7 +25,11 @@ Modular Architecture
 🛠️ Tech Stack
 
 Node.js + Express.js – Backend framework
+
 MongoDB – Database (Mongoose ORM)
+
 JWT & OAuth – Authentication
+
 Nodemailer – Email service for password reset
+
 Payment Gateway API – Secure transactions
